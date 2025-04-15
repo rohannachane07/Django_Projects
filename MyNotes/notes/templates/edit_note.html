@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Edit Note</h2>
+<form method="post">  <!--submits form data securely.-->
+    {% csrf_token %}  <!--protects your app from CSRF attacks.-->
+    {{form.as_p}}   <!--renders form fields as paragraphs.-->
+    <button type="submit">Update</button>
+</form>
+
+<a href="{% url 'home' %}">Cancel</a>
+
+{% endblock %}
+

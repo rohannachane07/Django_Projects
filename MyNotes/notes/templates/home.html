@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>ALL NOTES</h2>
+<a href="{% url 'add_note' %}">➕ Add New Note</a>
+<ul>
+    {% for note in notes %}
+    <li>
+        <strong>{{ note.title }}</strong> -<span style="word-break: break-word; white-space: normal;">{{ note.content }}</span><br>
+        <small>Created: {{ note.created_at }}</small><br>
+        <a href="{% url 'edit_note' note.id %}">✏️ Edit</a> |
+        <a href="{% url 'delete_note' note.id %}">🗑️ Delete</a>
+    </li>
+    <hr>
+{% empty %}
+    <li>No notes yet.</li>
+{% endfor %}
+</ul>
+{% endblock %}
+
+
+
+ <!-- Where does user come from in if user.is_authenticated ?
+In Django templates, the user variable is automatically available when you use RequestContext, which happens by default if you:
+Use render(request, 'template.html', {...}) in your views ✅
+Have 'django.contrib.auth.context_processors.auth' included in your settings.py (enabled by default) ✅
+
+🔍 Behind the scenes
+Django adds some built-in variables to your template context like:
+user → the current logged-in user (AnonymousUser if not logged in)
+request
+messages (for showing alerts/flash messages)
+
+These are made available via context processors.
+
+✅ So in your views.py:
+def home(request):
+    return render(request, 'home.html', {'notes': notes})
+    You don’t need to manually pass user=request.user — Django does it for you!
+ -->

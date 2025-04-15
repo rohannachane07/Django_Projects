@@ -1,0 +1,32 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Notes App{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'notes/style.css' %}">
+</head>
+<body>
+    <nav>
+        {% if user.is_authenticated %}
+            <div class="welcome-text">Welcome, {{ user.username }}!</div>
+            <form action="{% url 'logout' %}" method="post" id="logout-form">
+             <!-- <a href="{% url 'logout' %}">Logout</a>   Django’s built-in LogoutView only accepts POST requests for security reasons (to prevent CSRF attacks).
+              So when you click the <a> tag (which sends a GET request), Django blocks it — hence the HTTP 405 (Method Not Allowed).
+             Solution : Use a logout form with POST (Recommended by Django),replace the logout link with a small form:
+             If we want it to behave like a regular button or link:
+             we can style the form like a button and keep the security intact. -->
+                {% csrf_token %}
+                <button type="submit">LogOut</button>
+            </form>   
+        {% endif %}
+    </nav>
+    <hr>
+
+    {% block content %}
+    <!-- Page-specific content goes here -->
+    {% endblock %}
+</body>
+</html>
