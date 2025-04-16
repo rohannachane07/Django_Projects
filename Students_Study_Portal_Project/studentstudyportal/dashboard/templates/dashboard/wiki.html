@@ -1,0 +1,73 @@
+{% extends 'dashboard/base.html' %} 
+{% load static %} 
+{% block content %}
+
+<section class='text-center container'>
+    <h2 style="font-family: 'Arial', sans-serif;"><b>Search Articles in Wikipedia</b></h2>
+    <p>Just enter the search query to obtain the Results.<em><b>Enter without any SPACE!!!</b></em></p>
+    
+    <form action="" method="post" class="d-flex justify-content-center align-items-center">
+        {% csrf_token %}
+        {{form}}
+        <input class="btn btn-success ml-2" type="submit" value="Search">
+    </form><br>
+
+
+    <div class="container">
+        <div class="content-section p-0 mt-5">
+
+           {% if title %}
+            <a href="{{link}}" class="p-0 m-0" target="_blank">Click On The Name to Know More.
+                <div class="custom-header">
+                    <h2 style="font-family: 'Arial', sans-serif;">{{title}}</h2>
+                </div>
+            </a>
+
+            <hr class="p-0 m-0">
+            
+            {% if image_url %}
+            <div class="image-container">
+                <img src="{{ image_url }}" alt="{{ title }}" class="img-fluid mt-3">
+            </div>
+            {% endif %}
+
+            <p class="description m-5 p-5">
+                {{details}}
+            </p>
+            <hr>
+           {% elif options %}
+            <div class="disambiguation">
+                <h3>Multiple results found, please be more specific:</h3>
+                <ul>
+                    {% for option in options %}
+                    <li>
+                        <form action="" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="text" value="{{ option }}">
+                            <input type="hidden" name="from_option" value="yes">  <!-- Hidden input to indicate selection from options -->
+                            <button type="submit" class="btn btn-link">{{ option }}</button>
+                        </form>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% elif error %}
+            <div class="alert-danger">
+                {{ error }}
+            </div>
+            {% elif wrong %}
+            <div class="alert-success">
+                {{ wrong }}
+            </div>
+           {% endif %}
+        </div>
+    </div>
+
+    <div class="container-fluid d-flex justify-content-center align-items-end fixed-bottom" style="bottom: 0; color:grey;">
+        <p class="text-center mb-0">Note:Some Images may not be perfect according to your search. In such cases, Visit Official Page By Clicking on the Title Name.</p>
+    </div>
+    
+    
+</section>
+
+{% endblock content %}

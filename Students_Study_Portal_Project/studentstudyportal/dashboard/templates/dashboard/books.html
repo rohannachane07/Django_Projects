@@ -1,0 +1,79 @@
+{% extends 'dashboard/base.html' %} 
+{% load static %} 
+{% block content %}
+
+<section class='text-center container'>
+    <h2 style="font-family: 'Arial', sans-serif;"><b>Search Books and Browse Your Favourite</b></h2>
+    <p>Just enter the search query to obtain the Results</p>
+    <form action="" method="post" class="d-flex justify-content-center align-items-center">
+        {% csrf_token %}
+        {{form}}
+        <input class="btn btn-success ml-2" type="submit" value="Search">
+    </form><br>
+
+    {% for res in results %}
+    <a href="{{res.preview}}" target="_blank">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-3">
+                        {% if res.thumbnail %}
+                        <img class="img-fluid" src="{{res.thumbnail}}" alt="">
+                        {% else %}
+                        <img class="img-fluid" src="{% static 'images/default-thumbnail.png' %}" alt="Default Thumbnail">
+                        {% endif %}
+
+
+                    </div>
+                    <div class="col-md-9">
+                        <h3 class="p-0 m-0">{{res.title}}</h3>
+                        <b>
+                            <u>
+                                <h5 class="p-0 m-0">{{res.subtitle}}</h5>
+                            </u>
+                        </b>
+
+                        {% if res.description %}
+                        <h6 class="p-0 m-1">{{res.description}}</h6>
+                        {% endif %}
+
+                        {% if res.authors %}
+                            <h6 class="p-0 m-1"><b>Authors:</b> {{ res.authors|join:", " }}</h6>
+                        {% endif %}
+
+                        {% if res.publisher %}
+                            <h6 class="p-0 m-1"><b>Publisher:</b> {{ res.publisher }}</h6>
+                        {% endif %}
+
+                        {% if res.publishedDate %}
+                            <h6 class="p-0 m-1"><b>Published Date:</b> {{ res.publishedDate }}</h6>
+                        {% endif %}
+
+                        
+                        <b> 
+                        {% if res.categories %}
+                            <h6 class="ml-0 mt-3">Category:
+                                {% for category in res.categories %}
+                                {{category}} {% if not forloop.last %},{% endif %}
+                                {% endfor %}
+                            </h6>
+                       {% endif %}
+
+                       {% if res.count %}
+                            <h6 class="ml-0 mt-1">Pages: {{res.count}}</h6>
+                       {% endif %}
+                       {% if res.rating %}
+                            <h6 class="ml-0 mt-1">Ratings: {{res.rating}}</h6>
+                       {% endif %}
+                            
+                        </b>
+                    </div>
+                </div>
+            </div>
+        </div>
+         {% endfor %}
+    </a>
+    <br>
+</section>
+
+{% endblock content %}
